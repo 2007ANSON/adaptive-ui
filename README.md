@@ -10,8 +10,6 @@ Adaptive UI 是一個 AI 驅動的資訊優先排序介面（information priorit
 
 🎥 評選影片：待補
 
-🌐 作品展示網址：目前以本機 Prototype 展示
-
 ## Demo Flow
 
 ```text
