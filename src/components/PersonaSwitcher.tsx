@@ -1,14 +1,16 @@
-import { ArrowRightLeft, Check, UsersRound } from 'lucide-react'
-import type { Persona, PersonaId } from '../types'
+import { ArrowRightLeft, Check, Sparkles, UsersRound } from 'lucide-react'
+import type { Persona, PersonaId, ViewMode } from '../types'
 
 interface PersonaSwitcherProps {
   personas: Persona[]
   selectedId: PersonaId
   onSelect: (id: PersonaId) => void
   onCompareAll: () => void
+  mode: ViewMode
+  onModeChange: (mode: ViewMode) => void
 }
 
-export function PersonaSwitcher({ personas, selectedId, onSelect, onCompareAll }: PersonaSwitcherProps) {
+export function PersonaSwitcher({ personas, selectedId, onSelect, onCompareAll, mode, onModeChange }: PersonaSwitcherProps) {
   return (
     <aside className="persona-panel">
       <div className="panel-eyebrow"><UsersRound size={14} /> 示範使用者</div>
@@ -35,6 +37,13 @@ export function PersonaSwitcher({ personas, selectedId, onSelect, onCompareAll }
         <ArrowRightLeft size={15} />
         比較三種使用者
       </button>
+      <div className="sidebar-view-control" aria-label="快速比較資訊層級">
+        <span>資訊層級</span>
+        <div className="sidebar-view-options" role="group" aria-label="商品介面模式">
+          <button className={mode === 'default' ? 'is-active' : ''} onClick={() => onModeChange('default')} type="button">預設</button>
+          <button className={mode === 'adaptive' ? 'is-active' : ''} onClick={() => onModeChange('adaptive')} type="button"><Sparkles size={12} /> 個人化</button>
+        </div>
+      </div>
       <div className="principle-lockup"><span className="principle-dot" /> 操作位置維持不變 <span className="principle-divider">·</span> 資訊重點因人而異</div>
     </aside>
   )
