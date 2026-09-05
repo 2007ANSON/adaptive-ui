@@ -6,11 +6,11 @@ Adaptive UI 是一個 AI 驅動的資訊優先排序介面（information priorit
 
 **Stable navigation. Adaptive emphasis.** 操作位置保持穩定，只調整哪些資訊應該被優先看見。
 
-## Demo
+## 作品展示（Demo）
 
-🎥 Demo Video: [待補 Demo 影片連結]
+🎥 評選影片：待補
 
-🌐 Live Demo: [待補部署網址]
+🌐 作品展示網址：目前以本機 Prototype 展示
 
 ## Demo Flow
 
@@ -32,7 +32,7 @@ Adaptive UI 是一個 AI 驅動的資訊優先排序介面（information priorit
 
 Demo 最後提供 **Comparison Summary**，比較同一商品在不同資訊優先順序下的呈現；也可在商品頁切換 Default / Adaptive View。
 
-## Problem
+## 問題與目標（Problem）
 
 多數電商網站即使面對不同使用者，仍以相同的資訊層級呈現商品。但人們在購買決策中重視的資訊可能完全不同：價格、折扣與運費；評價、負評與退貨；或規格、相容性與技術細節。
 
@@ -138,7 +138,7 @@ Live AI 已使用這些未標記的 raw-behavior inputs 驗證完成：`unknown_
 }
 ```
 
-## Architecture
+## 系統架構（Architecture）
 
 ```mermaid
 flowchart LR
@@ -159,7 +159,16 @@ Stable Demo 另外保留 deterministic mock inference path，作為不依賴網�
 
 The integration boundary is [`src/services/analyzeBehavior.ts`](src/services/analyzeBehavior.ts). `analyzeBehavior` keeps the deterministic Stable Demo path, while `analyzeBehaviorLive` sends raw behavior to `POST /api/analyze-behavior` and maps the validated structured response into the existing Adaptive UI view model. Presentation components do not handle credentials or call OpenAI directly. The request/response contract is documented in [`docs/ai-contract.md`](docs/ai-contract.md).
 
-## Current Prototype Status
+## 使用技術
+
+| 類型 | 技術／服務 | 用途 |
+| --- | --- | --- |
+| AI 模型 | OpenAI GPT-5.6 Terra / Responses API | 從 raw behavioral events 推論使用者當下的資訊偏好 |
+| 前端 | React、Vite、TypeScript | Adaptive UI、Demo 與互動介面 |
+| 後端 | Node.js HTTP Server | Server-side Live AI inference endpoint |
+| Sponsor 技術 | 未使用 | 本作品未依賴 Sponsor 技術 |
+
+## 核心功能與目前 Prototype 狀態
 
 Implemented in this repository:
 
@@ -190,6 +199,16 @@ The project supports two inference paths:
 - `.env` is ignored by Git, and `.env.example` documents the required variable without a real key.
 - The Live AI endpoint accepts raw behavioral events and validates both request and structured response server-side.
 
+## 第三方服務、資料與素材
+
+- **OpenAI API**：用於 Live AI preference inference。
+- **React / Vite / TypeScript**：前端技術基礎。
+- **lucide-react**：Demo 介面的 icon library。
+- **Behavioral data**：本 Prototype 使用 synthetic behavioral data，不是真實電商使用者資料。
+- **商品與 Demo 資料**：為 Hackathon 展示用途的模擬資料。
+- **AI-assisted development**：開發過程使用 OpenAI Codex 協助程式撰寫、除錯與文件整理。
+- API 金鑰僅存在本機 `.env`，未提交至 Repository。
+
 ## Project Structure
 
 ```text
@@ -215,7 +234,7 @@ adaptive-ui/
 └── vite.config.ts
 ```
 
-## Run Locally
+## 安裝與執行（Run Locally）
 
 ### Requirements
 
@@ -231,7 +250,13 @@ npm install
 npm run dev
 ```
 
-For Live AI Mode, create `.env` from `.env.example`, add your own `OPENAI_API_KEY`, then start the local API in a second terminal:
+For Live AI Mode, create a local `.env` file (or copy `.env.example`) and add your own key. Do not commit this file:
+
+```dotenv
+OPENAI_API_KEY=...
+```
+
+Then start the local API in a second terminal:
 
 ```bash
 npm run dev:api
@@ -240,6 +265,7 @@ npm run dev:api
 In Windows PowerShell, use:
 
 ```powershell
+npm.cmd install
 npm.cmd run dev:api
 npm.cmd run dev
 ```
@@ -257,7 +283,9 @@ npm.cmd install
 npm.cmd run dev
 ```
 
-## Prototype Limitations
+## 限制與未來工作
+
+### Prototype Limitations
 
 The prototype deliberately does not yet include:
 
@@ -274,7 +302,7 @@ The prototype deliberately does not yet include:
 
 > 使用者行為能否被轉換成資訊偏好，並進一步調整介面的資訊優先順序。
 
-## Next Steps
+### Next Steps
 
 1. Run larger usability tests.
 2. Measure time-to-information and clicks-to-decision.
@@ -287,3 +315,14 @@ The prototype deliberately does not yet include:
 > **Why should every interface prioritize the same information?**
 
 **Same product. Different decision priorities.**
+
+## 團隊成員
+
+| 姓名 | 分工 |
+| --- | --- |
+| 利安生 | 產品設計、前端整合、AI 串接、Demo、文件與提交 |
+| 高毅峻 | 前期點子發想與產品方向討論 |
+
+## License
+
+MIT License
