@@ -105,65 +105,65 @@ export function App() {
       alexProfile: 5000,
       alexDefault: 3000,
       alexAdaptive: 6000,
-      compressedBehavior: 2800,
-      compressedProfile: 2800,
-      compressedAdaptive: 4800,
-      taylorAdaptive: 4800,
+      compressedBehavior: 3800,
+      compressedProfile: 3000,
+      compressedAdaptive: 5000,
+      taylorAdaptive: 5000,
       comparisonSummary: 7000,
     }
 
-    showBehaviorStep('alex', 'Alex · observe behavior')
+    showBehaviorStep('alex', 'Alex · 觀察行為')
     setIsDemoRunning(true)
 
     scheduleDemoStep(runId, () => {
       setIsAnalyzing(true)
-      setDemoMessage('Analyzing behavioral signals…')
+      setDemoMessage('正在分析使用者行為…')
 
       scheduleDemoStep(runId, () => {
         setIsAnalyzing(false)
         setProfileReady(true)
         setCurrentStep('profile')
         setViewMode('default')
-        setDemoMessage('Alex · infer preference')
+        setDemoMessage('Alex · 推論偏好')
 
         scheduleDemoStep(runId, () => {
           setCurrentStep('product')
           setViewMode('default')
-          setDemoMessage('Alex · default interface')
+          setDemoMessage('Alex · 預設介面')
 
           scheduleDemoStep(runId, () => {
             setViewMode('adaptive')
-            setDemoMessage('Alex · adaptive interface · value first')
+            setDemoMessage('Alex · 個人化介面 · 價格優先')
 
             scheduleDemoStep(runId, () => {
-              showBehaviorStep('jamie', 'Jamie · observe behavior')
+              showBehaviorStep('jamie', 'Jamie · 觀察行為')
 
               scheduleDemoStep(runId, () => {
                 setProfileReady(true)
                 setCurrentStep('profile')
-                setDemoMessage('Jamie · infer preference')
+                setDemoMessage('Jamie · 推論偏好')
 
                 scheduleDemoStep(runId, () => {
                   setCurrentStep('product')
                   setViewMode('adaptive')
-                  setDemoMessage('Jamie · adaptive interface · trust first')
+                  setDemoMessage('Jamie · 個人化介面 · 信任優先')
 
                   scheduleDemoStep(runId, () => {
-                    showBehaviorStep('taylor', 'Taylor · observe behavior')
+                    showBehaviorStep('taylor', 'Taylor · 觀察行為')
 
                     scheduleDemoStep(runId, () => {
                       setProfileReady(true)
                       setCurrentStep('profile')
-                      setDemoMessage('Taylor · infer preference')
+                      setDemoMessage('Taylor · 推論偏好')
 
                       scheduleDemoStep(runId, () => {
                         setCurrentStep('product')
                         setViewMode('adaptive')
-                        setDemoMessage('Taylor · adaptive interface · specs first')
+                        setDemoMessage('Taylor · 個人化介面 · 規格優先')
 
                         scheduleDemoStep(runId, () => {
                           setIsComparisonVisible(true)
-                          setDemoMessage('Comparison summary · same product, different priorities')
+                          setDemoMessage('比較總覽 · 不同的資訊優先順序')
 
                           scheduleDemoStep(runId, () => {
                             setIsDemoRunning(false)
@@ -195,12 +195,12 @@ export function App() {
 
   return (
     <div className={`app-shell ${isComparisonVisible ? 'is-summary' : ''}`}>
-      <header className="topbar"><Logo /><div className="topbar-context"><span className="context-dot" /> Hackathon prototype <span className="context-slash">/</span> Adaptive information hierarchy</div><div className="topbar-actions"><button className={`demo-mode-button ${isDemoRunning ? 'is-running' : ''}`} onClick={runGuidedDemo} type="button"><span className="demo-play-icon"><Play size={11} fill="currentColor" /></span>{isDemoRunning ? 'Demo running' : 'Run demo mode'}</button><button className="icon-button" title="Prototype notes" type="button"><Info size={17} /></button></div></header>
+      <header className="topbar"><Logo /><div className="topbar-context"><span className="context-dot" /> Hackathon 展示 <span className="context-slash">/</span> 個人化資訊層級</div><div className="topbar-actions"><button className={`demo-mode-button ${isDemoRunning ? 'is-running' : ''}`} onClick={runGuidedDemo} type="button"><span className="demo-play-icon"><Play size={11} fill="currentColor" /></span>{isDemoRunning ? 'Demo 進行中' : '開始 Demo'}</button><button className="icon-button" title="Prototype 備註" type="button"><Info size={17} /></button></div></header>
       <main>
-        <div className="hero-bar"><div><div className="hero-kicker"><Sparkles size={14} /> THE PERSONALIZATION LAYER</div><p>Every user decides differently. Why should every interface prioritize the same information?</p></div><div className="hero-caption">01 — 03 <span /></div></div>
+        <div className="hero-bar"><div><div className="hero-kicker"><Sparkles size={14} /> 個人化資訊層</div><p>每個人的購買決策方式都不同，為什麼介面要用相同的資訊優先順序？</p></div><div className="hero-caption">01 — 03 <span /></div></div>
         <div className="workspace"><PersonaSwitcher personas={personas} selectedId={selectedPersonaId} onSelect={selectPersona} onCompareAll={showComparisonSummary} /><div className="demo-canvas"><DemoProgress currentStep={currentStep} isSummary={isComparisonVisible} onSelect={goToStep} />{demoMessage && <div className="demo-toast"><span className="status-dot" /> {demoMessage}</div>}{isComparisonVisible ? <ComparisonSummaryView personas={personas} product={product} /> : currentStep === 'behavior' ? <BehaviorPanel persona={persona} onAnalyze={runAnalysis} isAnalyzing={isAnalyzing} /> : currentStep === 'profile' ? <PreferenceProfile persona={persona} profile={persona.profile} onGenerate={() => { setViewMode('adaptive'); setCurrentStep('product') }} /> : <ProductPage persona={persona} product={product} mode={viewMode} onModeChange={setViewMode} onBack={() => setCurrentStep('profile')} />}</div></div>
       </main>
-      <footer className="app-footer"><span>Layer / 2026</span><span className="footer-center"><span className="footer-pip" /> Stable navigation, adaptive emphasis</span><button onClick={resetDemo} type="button"><RotateCcw size={13} /> Reset demo</button></footer>
+      <footer className="app-footer"><span>Layer / 2026</span><span className="footer-center"><span className="footer-pip" /> 操作位置維持不變，資訊重點因人而異。</span><button onClick={resetDemo} type="button"><RotateCcw size={13} /> 重設 Demo</button></footer>
     </div>
   )
 }

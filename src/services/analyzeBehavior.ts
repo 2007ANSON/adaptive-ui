@@ -9,6 +9,6 @@ export async function analyzeBehavior(events: BehaviorEvent[], profile: Preferen
   return {
     ...profile,
     reasoning: profile.reasoning.map((reason) => `${reason}`),
-    summary: `${profile.summary} Based on ${events.length} observed actions.`,
+    summary: `${profile.summary} 根據 ${events.length} 筆觀察到的行為。`,
   }
 }

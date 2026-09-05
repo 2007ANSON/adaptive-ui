@@ -2,9 +2,9 @@ import { Check, ChevronRight, Circle } from 'lucide-react'
 import type { StageId } from '../types'
 
 const steps: { id: StageId; number: string; label: string }[] = [
-  { id: 'behavior', number: '01', label: 'Observe Behavior' },
-  { id: 'profile', number: '02', label: 'Infer Preference' },
-  { id: 'product', number: '03', label: 'Adapt Interface' },
+  { id: 'behavior', number: '01', label: '觀察行為' },
+  { id: 'profile', number: '02', label: '推論偏好' },
+  { id: 'product', number: '03', label: '調整介面' },
 ]
 
 interface DemoProgressProps {
@@ -18,7 +18,7 @@ export function DemoProgress({ currentStep, onSelect, isSummary = false }: DemoP
   const progressWidth = isSummary ? '100%' : `${(activeIndex / (steps.length - 1)) * 100}%`
 
   return (
-    <nav className="progress-rail" aria-label="Demo progress">
+    <nav className="progress-rail" aria-label="Demo 進度">
       <div className="progress-rail-line" aria-hidden="true"><span style={{ width: progressWidth }} /></div>
       {steps.map((step, index) => {
         const completed = isSummary || index < activeIndex

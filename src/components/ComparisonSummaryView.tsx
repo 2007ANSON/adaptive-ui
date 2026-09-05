@@ -17,18 +17,18 @@ function ComparisonCard({ persona, product }: ComparisonCardProps) {
   const PrimaryIcon = persona.id === 'alex' ? CircleDollarSign : persona.id === 'jamie' ? ShieldCheck : SlidersHorizontal
 
   const details = persona.id === 'alex'
-    ? ['Save NT$2,000', `Coupon -NT$${product.coupon.toLocaleString('en-US')}`, 'Free shipping', 'Compare sellers']
+    ? ['現省 NT$2,000', `優惠券 -NT$${product.coupon.toLocaleString('en-US')}`, '免運', '比較賣家']
     : persona.id === 'jamie'
-      ? ['1,284 verified reviews', 'Buyer photos', 'Recent negative reviews', '7-day return policy', 'Verified seller']
-      : ['Bluetooth 5.3 · 254g', 'Multipoint', 'Noise cancelling', 'Compatibility: iOS · Android · Windows · macOS']
+      ? ['1,284 則已驗證評論', '買家照片', '近期負評', '7 天退貨', '認證賣家']
+      : ['Bluetooth 5.3 · 254g', '多點連線', '主動降噪', '相容性：iOS · Android · Windows · macOS']
 
-  const primaryValue = persona.id === 'alex' ? price : persona.id === 'jamie' ? `${product.rating}/5` : '30-hour battery'
-  const primaryLabel = persona.id === 'alex' ? 'Price & value' : persona.id === 'jamie' ? 'Trust & reviews' : 'Specifications'
+  const primaryValue = persona.id === 'alex' ? price : persona.id === 'jamie' ? `${product.rating}/5` : '30 小時續航'
+  const primaryLabel = persona.id === 'alex' ? '價格與優惠' : persona.id === 'jamie' ? '評價與信任' : '商品規格'
   const supportingValue = persona.id === 'alex'
-    ? `Save ${savings}`
+    ? `現省 ${savings}`
     : persona.id === 'jamie'
-      ? `${product.rating} rating · ${price}`
-      : `${price} · ${product.rating} rating`
+      ? `${product.rating} 分評價 · ${price}`
+      : `${price} · ${product.rating} 分評價`
 
   return (
     <article
@@ -40,7 +40,7 @@ function ComparisonCard({ persona, product }: ComparisonCardProps) {
           <span className="comparison-avatar">{persona.initials}</span>
           <div><strong>{persona.name}</strong><span>{persona.role}</span></div>
         </div>
-        <span className="comparison-focus">{persona.id === 'alex' ? 'VALUE' : persona.id === 'jamie' ? 'TRUST' : 'SPECS'}</span>
+        <span className="comparison-focus">{persona.id === 'alex' ? '價格' : persona.id === 'jamie' ? '信任' : '規格'}</span>
       </div>
 
       <div className="comparison-product-name">{product.name}<span>{product.category}</span></div>
@@ -55,7 +55,7 @@ function ComparisonCard({ persona, product }: ComparisonCardProps) {
       </ul>
 
       <div className="comparison-supporting">
-        <span>Adaptive emphasis</span>
+        <span>個人化重點</span>
         <strong>{supportingValue}</strong>
       </div>
     </article>
@@ -64,14 +64,14 @@ function ComparisonCard({ persona, product }: ComparisonCardProps) {
 
 export function ComparisonSummaryView({ personas, product }: ComparisonSummaryViewProps) {
   return (
-    <section className="comparison-view" aria-label="Comparison summary">
+    <section className="comparison-view" aria-label="比較總覽">
       <div className="comparison-view-header">
         <div>
-          <div className="comparison-kicker"><Sparkles size={15} /> DEMO RESULT · COMPARISON SUMMARY</div>
-          <h1>Same product. <span>Different decision priorities.</span></h1>
-          <p>The interface keeps its structure — only the information emphasis changes.</p>
+          <div className="comparison-kicker"><Sparkles size={15} /> DEMO 結果 · 比較總覽</div>
+          <h1>同一件商品，不同的決策優先順序。</h1>
+          <p>介面結構保持一致，只調整資訊的視覺優先順序。</p>
         </div>
-        <div className="comparison-same-product"><span className="status-dot" /> One product · three adaptive views</div>
+        <div className="comparison-same-product"><span className="status-dot" /> 同一件商品 · 三種個人化介面</div>
       </div>
 
       <div className="comparison-grid">
@@ -79,8 +79,8 @@ export function ComparisonSummaryView({ personas, product }: ComparisonSummaryVi
       </div>
 
       <div className="comparison-view-footer">
-        <span><span className="footer-pip" /> Behavior → Preference → Adaptive UI</span>
-        <span>Same underlying information · different visual priorities</span>
+        <span><span className="footer-pip" /> 行為 → 偏好 → 個人化介面</span>
+        <span>同一份商品資訊 · 不同的視覺優先順序</span>
       </div>
     </section>
   )

@@ -1,6 +1,6 @@
 export function HeadphoneVisual() {
   return (
-    <div className="product-visual" aria-label="Abstract illustration of Sony WH-1000XM6 headphones" role="img">
+    <div className="product-visual" aria-label="Sony WH-1000XM6 耳機示意圖" role="img">
       <div className="visual-noise noise-one" /><div className="visual-noise noise-two" />
       <svg viewBox="0 0 360 260" className="headphone-svg" aria-hidden="true">
         <defs>
