@@ -124,6 +124,8 @@ Consented first-party behavioral events
 
 AI input 只包含 raw behavior events，不包含 expected preference、persona、demographics 或其他推論欄位。預期結果與檢查規則則獨立記錄在 [`docs/ai-contract.md`](docs/ai-contract.md)，因此驗證時只將 request object 送至 inference service，再以回傳的 style、範圍與 grounded reasoning 比對。
 
+Live AI 已使用這些未標記的 raw-behavior inputs 驗證完成：`unknown_01` 的真實 OpenAI inference 3/3 都回傳 `trust_focused`，`unknown_02` 的 3/3 都回傳 `specs_focused`。這些 request 不包含 preference label 或 expected answer，驗證的是 inference 結果並非依 named demo persona hard-code。
+
 簡短的輸入形式如下：
 
 ```json
@@ -141,11 +143,13 @@ AI input 只包含 raw behavior events，不包含 expected preference、persona
 ```mermaid
 flowchart LR
     A[User Behavior Events] --> B[Behavior Analysis Service]
-    B --> C[AI Preference Inference]
+    B --> C[OpenAI Preference Inference]
     C --> D[Structured Preference JSON]
     D --> E[React Adaptive UI]
     E --> F[Personalized Information Hierarchy]
 ```
+
+Stable Demo 另外保留 deterministic mock inference path，作為不依賴網路、可重現的 Hackathon presentation fallback。
 
 ### Frontend
 
@@ -153,7 +157,7 @@ flowchart LR
 - Vite
 - TypeScript
 
-The integration boundary is [`src/services/analyzeBehavior.ts`](src/services/analyzeBehavior.ts). The frontend and inference layer are separated, so a future backend adapter can replace the mock implementation without requiring presentation components to call an API directly. The request/response contract is documented in [`docs/ai-contract.md`](docs/ai-contract.md).
+The integration boundary is [`src/services/analyzeBehavior.ts`](src/services/analyzeBehavior.ts). `analyzeBehavior` keeps the deterministic Stable Demo path, while `analyzeBehaviorLive` sends raw behavior to `POST /api/analyze-behavior` and maps the validated structured response into the existing Adaptive UI view model. Presentation components do not handle credentials or call OpenAI directly. The request/response contract is documented in [`docs/ai-contract.md`](docs/ai-contract.md).
 
 ## Current Prototype Status
 
@@ -166,15 +170,25 @@ Implemented in this repository:
 - Value-focused, trust-focused, and specs-focused information hierarchy
 - Comparison Summary for the same product across all three personas
 - Synthetic behavioral datasets and unlabeled unknown-user fixtures
-- AI input / output contract, local Live AI endpoint, and a narrow frontend integration boundary
+- Local Node.js Live AI endpoint (`POST /api/analyze-behavior`) using the official OpenAI SDK, Responses API, structured JSON output, and server-side runtime validation
+- Frontend integration that directly renders the validated Live AI response as Adaptive UI
 - Traditional Chinese demo UI and responsive desktop-to-tablet layout rules
 - Production build script (`npm run build`)
 
 ### AI integration status
 
-> **Stable frontend Demo currently uses mock inference.** A separate `unknown_01` Live AI control posts raw behavior to the local server and renders the validated response through the existing adaptive UI.
+The project supports two inference paths:
 
-`analyzeBehavior` remains the deterministic mock used by the guided Demo. `analyzeBehaviorLive` calls the local server; its OpenAI API key is server-side only and the backend validates the structured result before returning it to React.
+- **Stable Demo Mode** uses deterministic mock inference for reproducible presentation, offline operation, and Hackathon Demo fallback.
+- **Live AI Mode** sends raw behavioral events to the server-side OpenAI endpoint and returns structured preference JSON that directly drives the Adaptive UI.
+
+`analyzeBehavior` remains the deterministic mock used by the guided Demo. `analyzeBehaviorLive` calls the local server, whose backend validates the structured result before returning it to React. Live AI reasoning is returned in Traditional Chinese.
+
+### API key and runtime security
+
+- `OPENAI_API_KEY` exists only in the server runtime; the frontend never receives it.
+- `.env` is ignored by Git, and `.env.example` documents the required variable without a real key.
+- The Live AI endpoint accepts raw behavioral events and validates both request and structured response server-side.
 
 ## Project Structure
 
@@ -182,18 +196,21 @@ Implemented in this repository:
 adaptive-ui/
 ├── docs/
 │   └── ai-contract.md             # Inference input/output and validation boundary
+├── server/
+│   └── index.mjs                  # Server-side OpenAI Responses API endpoint
 ├── src/
 │   ├── components/                # Demo stages and adaptive product UI
 │   ├── data/
 │   │   ├── mockData.ts            # Product and named demo personas
 │   │   └── unknownUsers.ts        # Unlabeled raw-behavior validation fixtures
 │   ├── services/
-│   │   └── analyzeBehavior.ts     # Deterministic mock / future API seam
+│   │   └── analyzeBehavior.ts     # Stable Demo mock and Live AI adapter
 │   ├── App.tsx                    # Demo orchestration
 │   ├── main.tsx
 │   ├── styles.css
 │   └── types.ts                   # UI and inference contract types
 ├── index.html
+├── .env.example                   # OPENAI_API_KEY placeholder only
 ├── package.json
 └── vite.config.ts
 ```
@@ -214,10 +231,17 @@ npm install
 npm run dev
 ```
 
-For the Live AI validation control, create `.env` from `.env.example`, add your own `OPENAI_API_KEY`, then start the local API in a second terminal:
+For Live AI Mode, create `.env` from `.env.example`, add your own `OPENAI_API_KEY`, then start the local API in a second terminal:
 
 ```bash
 npm run dev:api
+```
+
+In Windows PowerShell, use:
+
+```powershell
+npm.cmd run dev:api
+npm.cmd run dev
 ```
 
 ### Production build
@@ -252,12 +276,10 @@ The prototype deliberately does not yet include:
 
 ## Next Steps
 
-1. Connect a live AI inference backend behind the existing service boundary.
-2. Validate unlabeled unknown-user fixtures against the contract.
-3. Run larger usability tests.
-4. Measure time-to-information and clicks-to-decision.
-5. Test confidence-based adaptation strength.
-6. Explore non-commerce applications.
+1. Run larger usability tests.
+2. Measure time-to-information and clicks-to-decision.
+3. Test confidence-based adaptation strength.
+4. Explore non-commerce applications.
 
 ## Core Idea
 
