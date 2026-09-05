@@ -11,7 +11,7 @@ Raw behavior events
   -> frontend adaptive information hierarchy
 ```
 
-The React UI continues to call `src/services/analyzeBehavior.ts`. Today that service is a deterministic mock. A future backend implementation belongs behind that same service boundary and returns the structured response described below; no presentation component should call a backend directly.
+The React UI continues to call `src/services/analyzeBehavior.ts`. The stable named-persona Demo uses its deterministic mock, while the Live AI validation control calls the local backend through that same service boundary. No presentation component calls a backend directly.
 
 ## Input schema
 
@@ -113,7 +113,7 @@ The stable demo currently passes its display-oriented `BehaviorEvent` and `Prefe
 - 0–1 scores and confidence -> existing 0–100 display values
 - `reasoning` -> existing reasoning list
 
-Do not add a `fetch`, endpoint, environment variable, API key, database, or direct component-level integration until the backend contract owner implements that adapter.
+The implemented Live AI adapter posts only `AnalyzeBehaviorRequest` to `/api/analyze-behavior`. Its server-side API key remains outside Vite and the React bundle; the response is validated on the server before it is returned to the adapter.
 
 ## Unknown-user validation
 

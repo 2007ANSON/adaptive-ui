@@ -5,10 +5,13 @@ import { BehaviorEvent } from './BehaviorEvent'
 interface BehaviorPanelProps {
   persona: Persona
   onAnalyze: () => void
+  onAnalyzeLive: () => void
   isAnalyzing: boolean
+  isLiveAvailable: boolean
+  liveError: string
 }
 
-export function BehaviorPanel({ persona, onAnalyze, isAnalyzing }: BehaviorPanelProps) {
+export function BehaviorPanel({ persona, onAnalyze, onAnalyzeLive, isAnalyzing, isLiveAvailable, liveError }: BehaviorPanelProps) {
   return (
     <section className="stage-layout behavior-layout">
       <div className="stage-intro">
@@ -31,7 +34,8 @@ export function BehaviorPanel({ persona, onAnalyze, isAnalyzing }: BehaviorPanel
         <div className="event-list">
           {persona.events.map((event, index) => <BehaviorEvent event={event} index={index} key={event.id} />)}
         </div>
-        <div className="card-action-row"><span><Sparkles size={15} /> 模擬資料</span><button className="primary-button" disabled={isAnalyzing} onClick={onAnalyze} type="button">{isAnalyzing ? '正在分析使用者行為…' : '分析使用者行為'} <ArrowRight size={17} /></button></div>
+        <div className="card-action-row"><span><Sparkles size={15} /> 模擬資料</span><div className="analysis-actions"><button className="secondary-button" disabled={isAnalyzing || !isLiveAvailable} onClick={onAnalyzeLive} type="button">{isAnalyzing ? '正在分析使用者行為…' : '使用 Live AI 分析 unknown_01'}</button><button className="primary-button" disabled={isAnalyzing} onClick={onAnalyze} type="button">{isAnalyzing ? '正在分析使用者行為…' : '分析使用者行為'} <ArrowRight size={17} /></button></div></div>
+        {liveError && <p className="live-error" role="alert">{liveError} 請改用「分析使用者行為」繼續示範模式。</p>}
       </div>
     </section>
   )
