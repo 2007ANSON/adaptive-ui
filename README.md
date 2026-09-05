@@ -166,15 +166,15 @@ Implemented in this repository:
 - Value-focused, trust-focused, and specs-focused information hierarchy
 - Comparison Summary for the same product across all three personas
 - Synthetic behavioral datasets and unlabeled unknown-user fixtures
-- AI input / output contract and a narrow frontend integration boundary
+- AI input / output contract, local Live AI endpoint, and a narrow frontend integration boundary
 - Traditional Chinese demo UI and responsive desktop-to-tablet layout rules
 - Production build script (`npm run build`)
 
 ### AI integration status
 
-> **Stable frontend Demo currently uses mock inference. Live AI backend integration is in progress.**
+> **Stable frontend Demo currently uses mock inference.** A separate `unknown_01` Live AI control posts raw behavior to the local server and renders the validated response through the existing adaptive UI.
 
-More precisely, `analyzeBehavior` currently waits briefly and returns the supplied display profile deterministically. The backend-facing raw request/structured response types and validation contract are present, but no `fetch`, endpoint, API key, database, or direct component-level backend integration is implemented in this prototype.
+`analyzeBehavior` remains the deterministic mock used by the guided Demo. `analyzeBehaviorLive` calls the local server; its OpenAI API key is server-side only and the backend validates the structured result before returning it to React.
 
 ## Project Structure
 
@@ -212,6 +212,12 @@ git clone https://github.com/2007ANSON/adaptive-ui.git
 cd adaptive-ui
 npm install
 npm run dev
+```
+
+For the Live AI validation control, create `.env` from `.env.example`, add your own `OPENAI_API_KEY`, then start the local API in a second terminal:
+
+```bash
+npm run dev:api
 ```
 
 ### Production build
