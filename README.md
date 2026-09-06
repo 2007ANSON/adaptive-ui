@@ -319,7 +319,6 @@ The prototype deliberately does not yet include:
 | 姓名 | 分工 |
 | --- | --- |
 | 利安生 | 產品設計、前端整合、AI 串接、Demo、文件與提交 |
-| 高毅峻 | 前期點子發想與產品方向討論 |
 
 ## License
 
